@@ -10,13 +10,16 @@
  */
 namespace Core;
 
+use Controller\IndexController;
+
 class core
 {
     /**
      * 运行程序
      */
-    static public function run()
+    public static function run()
     {
+        error_reporting(~E_STRICT);
         spl_autoload_register('self::loadClass');
         self::setReporting();//检测开发环境
         self::removeMagicQuotes();//检测敏感字符并删除
@@ -30,10 +33,10 @@ class core
     private function setReporting()
     {
         if(APP_DEBUG){
-            error_reporting(E_ALL);
+            error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
             ini_set('display_errors','On');
         }else{
-            error_reporting(E_ALL);
+            error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
             ini_set('display_errors','Off');
             ini_set('log_errors', 'On');
             ini_set('error_log', RUNTIME_PATH. 'logs/error.log');
@@ -88,11 +91,11 @@ class core
      * 自动加载
      * @param $class
      */
-    private function loadClass($class)
+    private static function loadClass($class)
     {
-        $frameworks = FRAME_PATH.$class.'class.php';
-        $controller = APP_PATH.'application/Controller/'.$class.'class.php';
-        $model = APP_PATH.'application/Model/'.$class.'class.php';
+        $frameworks = FRAME_PATH.$class.'.class.php';
+        $controller = APP_PATH.'application/'.$class.'.class.php';
+        $model = APP_PATH.'application/'.$class.'.class.php';
 
         if (file_exists($frameworks)) {
             include $frameworks;
@@ -103,6 +106,7 @@ class core
         } else {
             echo $class.'类无法自动加载,请手动加载';
         }
+
     }
     
     /**
@@ -114,8 +118,9 @@ class core
         $method = 'index';
         //TODO:URL大小写兼容
         if(!empty($_SERVER['PATH_INFO'])){
-            list($controller_name, $method) = explode('/', $_SERVER['PATH_INFO'], 2);
-            $paths = explode('/', $_SERVER['PATH_INFO']);
+            $paths = explode('/', trim($_SERVER['PATH_INFO'], '/'));
+            $controller_name = $paths[0];
+            $method = $paths[1];
             $var = array();
             array_shift($paths);
             array_shift($paths);
@@ -129,9 +134,10 @@ class core
             }
             $_GET   =  array_merge($var,$_GET);
         }
+
         // 实例化控制器
-        $controller = $controller_name . 'Controller';
-        $dispatch = new $controller($controller_name, $method);
+        $controller = '\Controller\\'.$controller_name . 'Controller';
+        $dispatch = new $controller();
 
         if(method_exists($controller, $method)){
             call_user_func_array(array($dispatch, $method), $_GET);

@@ -14,8 +14,13 @@ defined('APP_PATH') or define('APP_PATH', dirname($_SERVER['SCRIPT_FILENAME']).'
 defined('APP_DEBUG') or define('APP_DEBUG', false);
 defined('RUNTIME_PATH') or define('RUNTIME_PATH', APP_PATH.'runtime/');
 
-//包含配置文件
-require APP_PATH . 'Common/config.php';
+//包含公共函数文件
+require(APP_PATH . 'Common/functions.php');
 
+//包含配置文件
+C(require(APP_PATH . 'Common/config.php'));
+
+//包含核心框架类
+require FRAME_PATH . 'Core/core.class.php';
 //包含
-Core\core::run();
+\Core\core::run();

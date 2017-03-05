@@ -7,7 +7,7 @@
  * Time: 17:43
  * email:596169733@qq.com
  */
-$_CONFIG = array(
+return array(
     //默认数据库配置
     'DB_DEFAULT' => array(
         'TYPE' => 'mysql',
