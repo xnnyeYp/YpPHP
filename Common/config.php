@@ -11,11 +11,11 @@ return array(
     //默认数据库配置
     'DB_DEFAULT' => array(
         'TYPE' => 'mysql',
-        'HOST' => '127.0.0.1',
+        'HOST' => '123.206.8.207',
         'NAME' => 'test',
         'USER' => 'root',
         'PWD' => '123456',
         'PORT' => '3306',
-        'PREFIX' => '',
+        'PREFIX' => 'yp_',
     ),
 );

@@ -137,7 +137,7 @@ class core
 
         // 实例化控制器
         $controller = '\Controller\\'.$controller_name . 'Controller';
-        $dispatch = new $controller();
+        $dispatch = new $controller($controller_name, $method);
 
         if(method_exists($controller, $method)){
             call_user_func_array(array($dispatch, $method), $_GET);

@@ -8,13 +8,37 @@
  */
 namespace Core;
 
+
 abstract class Controller {
     /**
      * 视图实例对象
      */
-    protected $view = null;
+    protected $View = null;
 
-    function __construct() {
+    /**
+     * Controller constructor.
+     * @param $controller
+     * @param $action
+     */
+    function __construct($controller, $action) {
+        $this->View = new View($controller, $action);
+    }
 
+    /**
+     * 分配变量
+     * @param $name
+     * @param $value
+     */
+    public function assign($name, $value)
+    {
+        $this->View->assign($name, $value);
+    }
+
+    /**
+     * 显示模版
+     */
+    public function display()
+    {
+        $this->View->display();
     }
 }

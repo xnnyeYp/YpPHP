@@ -9,12 +9,16 @@
 namespace Controller;
 
 use Core\Controller;
+use Model\UserModel;
 
 class IndexController extends Controller {
 
     public function index()
     {
-        var_dump(C());
-        echo 'hello world;';
+        $User = new UserModel();
+        $users = $User->getUserAll();
+
+        $this->assign('user', $users);
+        $this->display();
     }
 }
